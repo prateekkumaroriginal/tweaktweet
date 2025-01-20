@@ -5,7 +5,6 @@ import { analyzeResult } from "@/lib/types";
 import { askProps } from "@/lib/zod-props";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { ArrowLeftRight } from "lucide-react";
 import { useRef, useState } from "react";
 import { useForm, } from "react-hook-form";
 import { z } from "zod";
@@ -18,7 +17,7 @@ export default function Home() {
     resolver: zodResolver(askProps)
   });
 
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting, isValid } } = form;
+  const { register, handleSubmit, reset, formState: { isSubmitting, isValid } } = form;
 
   const onSubmit = async (values: z.infer<typeof askProps>) => {
     try {
