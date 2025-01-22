@@ -5,13 +5,14 @@ import { analyzeResult } from "@/lib/types";
 import { askProps } from "@/lib/zod-props";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm, } from "react-hook-form";
 import { z } from "zod";
 import TextArea from "@/components/TextArea";
 
 export default function Home() {
   const [result, setResult] = useState<analyzeResult>();
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const form = useForm<z.infer<typeof askProps>>({
     resolver: zodResolver(askProps),
@@ -35,6 +36,9 @@ export default function Home() {
   const onClear = () => {
     setResult(undefined);
     reset();
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
   }
 
   return (
@@ -53,6 +57,7 @@ export default function Home() {
           <TextArea
             register={register}
             errors={errors}
+            refCallback={(ref) => {textareaRef.current = ref}}
           />
         </form>
 

@@ -7,11 +7,13 @@ interface TextAreaProps {
     text: string
   }>;
   errors: FieldErrors;
+  refCallback: (ref: HTMLTextAreaElement | null) => void;
 }
 
 const TextArea = ({
   register,
-  errors
+  errors,
+  refCallback
 }: TextAreaProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -29,6 +31,7 @@ const TextArea = ({
         ref={(e) => {
           register("text").ref(e);
           textareaRef.current = e;
+          if (refCallback) refCallback(e);
         }}
         className="w-full rounded-lg p-4 bg-slate-600 resize-none focus:outline-none"
         rows={1}
