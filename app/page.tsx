@@ -5,19 +5,20 @@ import { analyzeResult } from "@/lib/types";
 import { askProps } from "@/lib/zod-props";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useForm, } from "react-hook-form";
 import { z } from "zod";
+import TextArea from "@/components/TextArea";
 
 export default function Home() {
   const [result, setResult] = useState<analyzeResult>();
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const form = useForm<z.infer<typeof askProps>>({
-    resolver: zodResolver(askProps)
+    resolver: zodResolver(askProps),
+    mode: "all"
   });
 
-  const { register, handleSubmit, reset, formState: { isSubmitting, isValid } } = form;
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting, isValid } } = form;
 
   const onSubmit = async (values: z.infer<typeof askProps>) => {
     try {
@@ -25,22 +26,7 @@ export default function Home() {
         params: values
       });
       const data = response.data;
-      console.log(data);
-
       setResult(data);
-
-      const { bestTime,
-        engagementPredicted,
-        suggestedText,
-        sentiment,
-        suggestions } = data;
-
-      console.log(bestTime,
-        engagementPredicted,
-        suggestedText,
-        sentiment,
-        suggestions,);
-
     } catch (error) {
       console.log(error);
     }
@@ -62,21 +48,12 @@ export default function Home() {
         <form
           id="main-form"
           onSubmit={handleSubmit(onSubmit)}
-          className="relative flex w-full bg-slate-600 rounded-lg p-4">
-          <textarea
-            {...register("text")}
-            ref={(e) => {
-              register("text").ref(e);
-              textareaRef.current = e;
-            }}
-            className="w-full resize-none bg-transparent focus:outline-none"
-            rows={1}
-            onInput={(e) => {
-              const target = e.target as HTMLTextAreaElement;
-              target.style.height = "auto";
-              target.style.height = `${target.scrollHeight}px`;
-            }}
-          ></textarea>
+          className="relative flex flex-col gap-y-8 w-full"
+        >
+          <TextArea
+            register={register}
+            errors={errors}
+          />
         </form>
 
         <div className="flex self-end gap-x-2 md:pr-1">
@@ -92,7 +69,7 @@ export default function Home() {
           <button
             type="submit"
             form="main-form"
-            className="py-2 px-6 rounded-3xl font-semibold text-xl bg-[#4F46E5] hover:bg-[#4F46E5]/90 disabled:cursor-not-allowed disabled:bg-[#4F46E5]/60 transition"
+            className="py-2 px-6 rounded-3xl font-semibold text-xl bg-[#4F46E5] hover:bg-[#4F46E5]/90 disabled:cursor-not-allowed disabled:bg-[#4F46E5]/60 disabled:opacity-50 transition"
             disabled={!isValid || isSubmitting}
           >
             <span className="relative top-[1px] uppercase">
