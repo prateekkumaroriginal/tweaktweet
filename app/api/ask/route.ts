@@ -6,7 +6,7 @@ export async function GET(req: Request) {
     try {
         const { searchParams } = new URL(req.url);
 
-        let text = searchParams.get('text');
+        const text = searchParams.get('text');
         console.log(text);
 
         if (!text) {
