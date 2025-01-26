@@ -5,9 +5,10 @@ import AdvancedForm from "@/components/AdvancedForm";
 import BasicForm from "@/components/BasicForm";
 import AnalysisResults from "@/components/AnalysisResults";
 import { ArrowLeftRight } from "lucide-react";
+import { analyzeResult } from "@/lib/types";
 
 export default function Home() {
-  const [result, setResult] = useState<any>();
+  const [result, setResult] = useState<analyzeResult>();
   const [isAdvanced, setIsAdvanced] = useState(false);
 
   return (

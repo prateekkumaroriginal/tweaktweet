@@ -7,6 +7,7 @@ import Input from "./Input";
 import Dropdown from "./Dropdown";
 import TextArea from "./TextArea";
 import { useRef } from "react";
+import { analyzeResult } from "@/lib/types";
 
 export const platformOptions = [
   { label: "Instagram", value: "INSTAGRAM" },
@@ -17,7 +18,7 @@ export const platformOptions = [
 ];
 
 interface AdvancedFormProps {
-  onResult: (result: any) => void; // Pass result back to parent
+  onResult: (result: analyzeResult | undefined) => void;
 }
 
 const AdvancedForm: React.FC<AdvancedFormProps> = ({ onResult }) => {
@@ -33,7 +34,7 @@ const AdvancedForm: React.FC<AdvancedFormProps> = ({ onResult }) => {
   const onSubmit = async (values: z.infer<typeof advancedAskProps>) => {
     try {
       const response = await axios.get("/api/ask", { params: values });
-      onResult(response.data); // Send result to parent
+      onResult(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -44,7 +45,7 @@ const AdvancedForm: React.FC<AdvancedFormProps> = ({ onResult }) => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
-    onResult(undefined); // Clear the result in parent
+    onResult(undefined);
   };
 
   return (

@@ -1,13 +1,14 @@
 import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { askProps,  } from "@/lib/zod-props";
+import { askProps, } from "@/lib/zod-props";
 import { z } from "zod";
 import axios from "axios";
 import TextArea from "@/components/TextArea";
+import { analyzeResult } from "@/lib/types";
 
 interface BasicFormProps {
-  onResult: (result: any) => void;
+  onResult: (result: analyzeResult | undefined) => void;
 }
 
 const BasicForm: React.FC<BasicFormProps> = ({ onResult }) => {
