@@ -9,8 +9,7 @@ const roboto = Roboto({
 
 export const metadata: Metadata = {
   title: "TweakTweet - Maximize Your Social Media Engagement",
-  description: "TweakTweet helps you craft engaging social media posts designed to maximize reach and interaction. Use AI-powered insights to optimize your content for the best results.",
-  icons: "/icon.ico"
+  description: "TweakTweet helps you craft engaging social media posts designed to maximize reach and interaction. Use AI-powered insights to optimize your content for the best results."
 };
 
 export default function RootLayout({
