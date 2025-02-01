@@ -23,3 +23,5 @@ export const advancedAskProps = askProps.extend({
         })
         .optional()
 });
+
+export const formType = z.enum(["BASIC", "ADVANCED"]);

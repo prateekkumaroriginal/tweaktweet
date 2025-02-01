@@ -5,10 +5,10 @@ import AdvancedForm from "@/components/AdvancedForm";
 import BasicForm from "@/components/BasicForm";
 import AnalysisResults from "@/components/AnalysisResults";
 import { ArrowLeftRight } from "lucide-react";
-import { analyzeResult } from "@/lib/types";
+import { basicAnalysisResult } from "@/lib/types";
 
 export default function Home() {
-  const [result, setResult] = useState<analyzeResult>();
+  const [result, setResult] = useState<basicAnalysisResult>();
   const [isAdvanced, setIsAdvanced] = useState(false);
 
   return (
@@ -30,9 +30,9 @@ export default function Home() {
 
       <div className="flex flex-col items-center w-[1000px] max-w-full gap-y-4 px-2 pb-20">
         {isAdvanced ? (
-          <AdvancedForm onResult={setResult} />
+          <AdvancedForm setResult={setResult} />
         ) : (
-          <BasicForm onResult={setResult} />
+          <BasicForm setResult={setResult} />
         )}
 
         {result && <AnalysisResults result={result} />}

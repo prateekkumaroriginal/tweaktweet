@@ -1,17 +1,17 @@
 import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { askProps, } from "@/lib/zod-props";
+import { askProps, formType, } from "@/lib/zod-props";
 import { z } from "zod";
 import axios from "axios";
 import TextArea from "@/components/TextArea";
-import { analyzeResult } from "@/lib/types";
+import { basicAnalysisResult } from "@/lib/types";
 
 interface BasicFormProps {
-  onResult: (result: analyzeResult | undefined) => void;
+  setResult: (result: basicAnalysisResult | undefined) => void;
 }
 
-const BasicForm: React.FC<BasicFormProps> = ({ onResult }) => {
+const BasicForm: React.FC<BasicFormProps> = ({ setResult }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const form = useForm<z.infer<typeof askProps>>({
@@ -23,8 +23,12 @@ const BasicForm: React.FC<BasicFormProps> = ({ onResult }) => {
 
   const onSubmit = async (values: z.infer<typeof askProps>) => {
     try {
-      const response = await axios.get("/api/ask", { params: values });
-      onResult(response.data);
+      const response = await axios.post("/api/ask", values, {
+        params: {
+          formType: formType.Values.BASIC
+        }
+      });
+      setResult(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -35,7 +39,7 @@ const BasicForm: React.FC<BasicFormProps> = ({ onResult }) => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
-    onResult(undefined);
+    setResult(undefined);
   };
 
   return (

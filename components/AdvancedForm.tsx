@@ -1,4 +1,4 @@
-import { advancedAskProps } from "@/lib/zod-props";
+import { advancedAskProps, formType } from "@/lib/zod-props";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -7,7 +7,7 @@ import Input from "./Input";
 import Dropdown from "./Dropdown";
 import TextArea from "./TextArea";
 import { useRef } from "react";
-import { analyzeResult } from "@/lib/types";
+import { basicAnalysisResult } from "@/lib/types";
 
 export const platformOptions = [
   { label: "Instagram", value: "INSTAGRAM" },
@@ -18,10 +18,10 @@ export const platformOptions = [
 ];
 
 interface AdvancedFormProps {
-  onResult: (result: analyzeResult | undefined) => void;
+  setResult: (result: basicAnalysisResult | undefined) => void;
 }
 
-const AdvancedForm: React.FC<AdvancedFormProps> = ({ onResult }) => {
+const AdvancedForm: React.FC<AdvancedFormProps> = ({ setResult }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const form = useForm<z.infer<typeof advancedAskProps>>({
@@ -33,8 +33,12 @@ const AdvancedForm: React.FC<AdvancedFormProps> = ({ onResult }) => {
 
   const onSubmit = async (values: z.infer<typeof advancedAskProps>) => {
     try {
-      const response = await axios.get("/api/ask", { params: values });
-      onResult(response.data);
+      const response = await axios.post("/api/ask", values, {
+        params: {
+          formType: formType.Values.ADVANCED
+        }
+      });
+      setResult(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -45,7 +49,7 @@ const AdvancedForm: React.FC<AdvancedFormProps> = ({ onResult }) => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
-    onResult(undefined);
+    setResult(undefined);
   };
 
   return (

@@ -1,7 +1,7 @@
-import { analyzeResult } from '@/lib/types'
+import { basicAnalysisResult } from '@/lib/types'
 
 interface AnalysisResultsProps {
-  result: analyzeResult
+  result: basicAnalysisResult
 }
 
 const AnalysisResults = ({ result }: AnalysisResultsProps) => {
