@@ -10,6 +10,12 @@ import { basicAnalysisResult } from "@/lib/types";
 export default function Home() {
   const [result, setResult] = useState<basicAnalysisResult>();
   const [isAdvanced, setIsAdvanced] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSetResult = (data: basicAnalysisResult | undefined) => {
+    setIsLoading(false);
+    setResult(data);
+  };
 
   return (
     <div className="h-full flex flex-col items-center gap-y-8 pt-20 px-8">
@@ -28,14 +34,26 @@ export default function Home() {
         <ArrowLeftRight className="size-4" />
       </button>
 
-      <div className="flex flex-col items-center w-[1000px] max-w-full gap-y-4 px-2 pb-20">
+      <div className="flex flex-col items-center w-[1000px] max-w-full gap-y-8 px-2 pb-20">
         {isAdvanced ? (
-          <AdvancedForm setResult={setResult} />
+          <AdvancedForm
+            setIsLoading={setIsLoading}
+            handleSetResult={handleSetResult}
+          />
         ) : (
-          <BasicForm setResult={setResult} />
+          <BasicForm
+            setIsLoading={setIsLoading}
+            handleSetResult={handleSetResult}
+          />
         )}
 
-        {result && <AnalysisResults result={result} />}
+        <div className="w-full mt-8">
+          {isLoading ? (
+            <AnalysisResults.Skeleton />
+          ) : (
+            result && <AnalysisResults result={result} />
+          )}
+        </div>
       </div>
     </div>
   );

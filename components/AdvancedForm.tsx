@@ -18,10 +18,14 @@ export const platformOptions = [
 ];
 
 interface AdvancedFormProps {
-  setResult: (result: basicAnalysisResult | undefined) => void;
+  handleSetResult: (result: basicAnalysisResult | undefined) => void;
+  setIsLoading: (loading: boolean) => void;
 }
 
-const AdvancedForm: React.FC<AdvancedFormProps> = ({ setResult }) => {
+const AdvancedForm = ({
+  handleSetResult,
+  setIsLoading
+}: AdvancedFormProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const form = useForm<z.infer<typeof advancedAskProps>>({
@@ -33,14 +37,16 @@ const AdvancedForm: React.FC<AdvancedFormProps> = ({ setResult }) => {
 
   const onSubmit = async (values: z.infer<typeof advancedAskProps>) => {
     try {
+      setIsLoading(true);
       const response = await axios.post("/api/ask", values, {
         params: {
           formType: formType.Values.ADVANCED
         }
       });
-      setResult(response.data);
+      handleSetResult(response.data);
     } catch (error) {
       console.error(error);
+      handleSetResult(undefined);
     }
   };
 
@@ -49,7 +55,8 @@ const AdvancedForm: React.FC<AdvancedFormProps> = ({ setResult }) => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
-    setResult(undefined);
+    handleSetResult(undefined);
+    setIsLoading(false);
   };
 
   return (

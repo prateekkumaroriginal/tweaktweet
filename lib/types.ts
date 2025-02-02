@@ -4,9 +4,13 @@ export type basicAnalysisResult = {
   suggestedText: string;
   sentiment: string;
   suggestions: string[];
+  suggestedHashtags: string[];
+  tone: string;
+  style: string;
 }
 
 export type advancedAnalysisResult = basicAnalysisResult & {
   likesPredicted: string;
-  tone: string;
+  sharesPredicted: string;
+  commentsPredicted: string;
 }

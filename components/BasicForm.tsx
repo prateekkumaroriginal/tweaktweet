@@ -8,10 +8,14 @@ import TextArea from "@/components/TextArea";
 import { basicAnalysisResult } from "@/lib/types";
 
 interface BasicFormProps {
-  setResult: (result: basicAnalysisResult | undefined) => void;
+  handleSetResult: (result: basicAnalysisResult | undefined) => void;
+  setIsLoading: (loading: boolean) => void;
 }
 
-const BasicForm: React.FC<BasicFormProps> = ({ setResult }) => {
+const BasicForm = ({
+  handleSetResult,
+  setIsLoading
+}: BasicFormProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const form = useForm<z.infer<typeof askProps>>({
@@ -23,14 +27,16 @@ const BasicForm: React.FC<BasicFormProps> = ({ setResult }) => {
 
   const onSubmit = async (values: z.infer<typeof askProps>) => {
     try {
+      setIsLoading(true);
       const response = await axios.post("/api/ask", values, {
         params: {
           formType: formType.Values.BASIC
         }
       });
-      setResult(response.data);
+      handleSetResult(response.data);
     } catch (error) {
       console.error(error);
+      handleSetResult(undefined);
     }
   };
 
@@ -39,7 +45,8 @@ const BasicForm: React.FC<BasicFormProps> = ({ setResult }) => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
-    setResult(undefined);
+    handleSetResult(undefined);
+    setIsLoading(false);
   };
 
   return (

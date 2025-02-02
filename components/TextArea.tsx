@@ -44,12 +44,12 @@ const TextArea = <T extends ZodTypeAny>({
         }}
       ></textarea>
 
-      <div className="flex text-rose-500">
+      {errors[name] && <div className="flex text-rose-500">
         <ErrorMessage
           errors={errors}
           name={name}
         />
-      </div>
+      </div>}
     </div>
   );
 }

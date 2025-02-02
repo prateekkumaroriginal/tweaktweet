@@ -4,6 +4,9 @@ export const BASIC_CONTEXT: string = `Give me a sentiment and engagement analysi
 3. bestTime: what is the best time to post should be here. Don't give any excuses like "It's difficult to determine the best time without more context". Just give a time.
 4. suggestions: an array containing the suggestions for maximizing engagement.
 5. suggestedText: give an example improved text with the same meaning under 280 characters.
+6. tone: Describe the overall emotion the post conveys.
+7. style: Define the writing style used in the post (e.g., professional, casual, humorous, persuasive, etc.).
+8. suggestedHashtags: an array containing the suggeste hashtags. Maximum is 5.
 
 Note: Start with '{' and end with '}' as plain text. Don't give it as a block of code. No other bullshit.
 
@@ -16,8 +19,11 @@ export const ADVANCED_CONTEXT: string = `Give me a sentiment and engagement anal
 3. bestTime: what is the best time to post should be here. Don't give any excuses like "It's difficult to determine the best time without more context". Just give a time.
 4. suggestions: an array containing the suggestions for maximizing engagement.
 5. suggestedText: give an example improved text with the same meaning under 280 characters.
-6. likesPredicted: Give a rough idea of how much likes the post would achieve based on post, platform and number of followers.
-7. tone: Give the emotion the post is spitting out.
+6. tone: Describe the overall emotion the post conveys.
+7. style: Define the writing style used in the post (e.g., professional, casual, humorous, persuasive, etc.).
+8. likesPredicted: Give a rough estimate of how many likes the post would achieve based on the platform and number of followers.
+9. sharesPredicted: Predict how many shares the post could get based on the platform and number of followers.
+10. commentsPredicted: Estimate the number of comments the post might receive based on the platform and number of followers.
 
 Note: Start with '{' and end with '}' as plain text. Don't give it as a block of code. No other bullshit.
 
