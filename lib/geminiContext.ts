@@ -21,9 +21,10 @@ export const ADVANCED_CONTEXT: string = `Give me a sentiment and engagement anal
 5. suggestedText: give an example improved text with the same meaning under 280 characters.
 6. tone: Describe the overall emotion the post conveys.
 7. style: Define the writing style used in the post (e.g., professional, casual, humorous, persuasive, etc.).
-8. likesPredicted: Give a rough estimate of how many likes the post would achieve based on the platform and number of followers.
-9. sharesPredicted: Predict how many shares the post could get based on the platform and number of followers.
-10. commentsPredicted: Estimate the number of comments the post might receive based on the platform and number of followers.
+8. suggestedHashtags: an array containing the suggeste hashtags. Maximum is 5.
+9. likesPredicted: Give a rough estimate of how many likes the post would achieve based on the platform and number of followers.
+10. sharesPredicted: Predict how many shares the post could get based on the platform and number of followers.
+11. commentsPredicted: Estimate the number of comments the post might receive based on the platform and number of followers.
 
 Note: Start with '{' and end with '}' as plain text. Don't give it as a block of code. No other bullshit.
 

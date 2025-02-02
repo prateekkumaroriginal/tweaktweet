@@ -1,9 +1,10 @@
-import { basicAnalysisResult } from '@/lib/types'
+import { advancedAnalysisResult, basicAnalysisResult } from '@/lib/types'
 import Title from './ui/Title'
 import BubbleCard from './ui/BubbleCard'
+import { Heart, MessageCircle, Share, Share2 } from 'lucide-react';
 
 interface AnalysisResultsProps {
-  result: basicAnalysisResult
+  result: basicAnalysisResult | advancedAnalysisResult;
 }
 
 const DISPLAY_FIELDS: Partial<Record<keyof basicAnalysisResult, string>> = {
@@ -14,7 +15,15 @@ const DISPLAY_FIELDS: Partial<Record<keyof basicAnalysisResult, string>> = {
   bestTime: 'Best Time to Post'
 };
 
+const ADVANCED_DISPLAY_FIELDS: Partial<Record<keyof advancedAnalysisResult, string>> = {
+  likesPredicted: 'Predicted Likes',
+  sharesPredicted: 'Predicted Shares',
+  commentsPredicted: 'Predicted Comments'
+};
+
 const AnalysisResults = ({ result }: AnalysisResultsProps) => {
+  const isAdvanced = 'likesPredicted' in result;
+
   return (
     <div className="flex flex-col w-full gap-y-8">
       <div className="w-full">
@@ -28,18 +37,61 @@ const AnalysisResults = ({ result }: AnalysisResultsProps) => {
         </BubbleCard>
       </div>
 
+      {isAdvanced && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <BubbleCard>
+            <div className="relative flex items-center">
+              <div className="flex justify-center items-center w-fit ml-2 mr-6">
+                <Heart className="size-12 text-rose-500" />
+              </div>
+              <div className="flex flex-col">
+                <Title title="Predicted Likes" />
+                <p className="flex items-center gap-x-2 text-3xl mt-2 capitalize">
+                  {result.likesPredicted}
+                </p>
+              </div>
+            </div>
+          </BubbleCard>
+
+          <BubbleCard>
+            <div className="relative flex items-center">
+              <div className="flex justify-center items-center w-fit ml-2 mr-6">
+                <Share2 className="size-12 text-emerald-500" />
+              </div>
+              <div className="flex flex-col">
+                <Title title="Predicted Shares" />
+                <p className="flex items-center gap-x-2 text-3xl mt-2 capitalize">
+                  {result.sharesPredicted}
+                </p>
+              </div>
+            </div>
+          </BubbleCard>
+
+          <BubbleCard>
+            <div className="relative flex items-center">
+              <div className="flex justify-center items-center w-fit ml-2 mr-6">
+                <MessageCircle className="size-12 text-blue-500" />
+              </div>
+              <div className="flex flex-col">
+                <Title title="Predicted Comments" />
+                <p className="flex items-center gap-x-2 text-3xl mt-2 capitalize">
+                  {result.commentsPredicted}
+                </p>
+              </div>
+            </div>
+          </BubbleCard>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {Object.entries(DISPLAY_FIELDS).map(([key, label]) => {
-          const value = result[key as keyof basicAnalysisResult];
-          return (
-            <BubbleCard key={key}>
-              <Title title={label} />
-              <p className="text-3xl text-[#e5e7eb] mt-2 pl-4 capitalize">
-                {value}
-              </p>
-            </BubbleCard>
-          )
-        })}
+        {Object.entries(DISPLAY_FIELDS).map(([key, label]) => (
+          <BubbleCard key={key}>
+            <Title title={label} />
+            <p className="text-3xl mt-2 pl-4 capitalize">
+              {result[key as keyof basicAnalysisResult]}
+            </p>
+          </BubbleCard>
+        ))}
       </div>
 
       <div className="flex w-full">
