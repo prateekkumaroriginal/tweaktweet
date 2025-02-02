@@ -1,7 +1,7 @@
 import { advancedAnalysisResult, basicAnalysisResult } from '@/lib/types'
 import Title from './ui/Title'
 import BubbleCard from './ui/BubbleCard'
-import { Heart, MessageCircle, Share, Share2 } from 'lucide-react';
+import { Heart, MessageCircle, Share2 } from 'lucide-react';
 
 interface AnalysisResultsProps {
   result: basicAnalysisResult | advancedAnalysisResult;
@@ -13,12 +13,6 @@ const DISPLAY_FIELDS: Partial<Record<keyof basicAnalysisResult, string>> = {
   style: 'Style',
   tone: 'Tone',
   bestTime: 'Best Time to Post'
-};
-
-const ADVANCED_DISPLAY_FIELDS: Partial<Record<keyof advancedAnalysisResult, string>> = {
-  likesPredicted: 'Predicted Likes',
-  sharesPredicted: 'Predicted Shares',
-  commentsPredicted: 'Predicted Comments'
 };
 
 const AnalysisResults = ({ result }: AnalysisResultsProps) => {
@@ -128,7 +122,7 @@ const AnalysisResults = ({ result }: AnalysisResultsProps) => {
   )
 }
 
-AnalysisResults.Skeleton = () => {
+const Skeleton = () => {
   return (
     <div className="flex flex-col w-full gap-y-8">
       {/* Suggested Text Card */}
@@ -170,5 +164,8 @@ AnalysisResults.Skeleton = () => {
     </div>
   );
 };
+
+Skeleton.displayName = "AnalysisResults.Skeleton";
+AnalysisResults.Skeleton = Skeleton;
 
 export default AnalysisResults
