@@ -118,37 +118,46 @@ export default function UploadDropzone({ onFileSelect, selectedFile }: UploadDro
   }, [preview, onFileSelect]);
 
   return (
-    <div ref={containerRef} className="w-full">
+    <div ref={containerRef} className="flex flex-col w-full gap-y-2">
       {!selectedFile ? (
-        <div
-          className={`relative border-2 border-dashed rounded-lg text-center ${isDragActive ? "border-blue-500 bg-blue-600/10" : error ? "border-red-500" : "border-slate-600"}`}
-          onDragEnter={handleDragEnter}
-          onDragLeave={handleDragLeave}
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-        >
-          <input
-            type="file"
-            className="hidden"
-            id="fileInput"
-            onChange={handleFileInput}
-            accept={ACCEPTED_IMAGE_TYPES.join(",")}
-          />
-
+        <>
           <label
             htmlFor="fileInput"
-            className="cursor-pointer flex flex-col items-center justify-center p-8"
+            className="text-sm pr-4 uppercase font-semibold text-slate-300/60"
           >
-            <Upload className={`w-12 h-12 mb-4 ${error ? "text-red-500" : "text-gray-400"}`} />
-            <p className={`text-lg font-semibold mb-2 ${error ? "text-red-500" : ""}`}>
-              {isDragActive ? "Drop image here" : "Drag & drop image here"}
-            </p>
-            <p className={`text-sm ${error ? "text-red-500" : "text-gray-500"}`}>
-              {error || "or click to select image"}
-            </p>
-            {error && <p className="text-xs text-gray-500 mt-2">Supported formats: JPEG, PNG, GIF, WebP</p>}
+            Image
           </label>
-        </div>
+          <div
+            className={`relative border-2 border-dashed rounded-lg text-center ${isDragActive ? "border-blue-500 bg-blue-600/10" : error ? "border-red-500" : "border-slate-600"}`}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+          >
+            <input
+              type="file"
+              className="hidden"
+              id="fileInput"
+              onChange={handleFileInput}
+              accept={ACCEPTED_IMAGE_TYPES.join(",")}
+            />
+
+
+            <label
+              htmlFor="fileInput"
+              className="cursor-pointer flex flex-col items-center justify-center p-8"
+            >
+              <Upload className={`w-12 h-12 mb-4 ${error ? "text-red-500" : "text-gray-400"}`} />
+              <p className={`text-lg font-semibold mb-2 ${error ? "text-red-500" : ""}`}>
+                {isDragActive ? "Drop image here" : "Drag & drop image here"}
+              </p>
+              <p className={`text-sm ${error ? "text-red-500" : "text-gray-500"}`}>
+                {error || "or click to select image"}
+              </p>
+              {error && <p className="text-xs text-gray-500 mt-2">Supported formats: JPEG, PNG, GIF, WebP</p>}
+            </label>
+          </div>
+        </>
       ) : (
         <div className="border border-slate-600 rounded-lg p-4">
           <div className="flex items-center justify-between">
