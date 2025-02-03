@@ -4,17 +4,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { askProps, formType, } from "@/lib/zod-props";
 import { z } from "zod";
 import axios from "axios";
-import TextArea from "@/components/TextArea";
+import TextArea from "@/components/ui/TextArea";
 import { basicAnalysisResult } from "@/lib/types";
 
 interface BasicFormProps {
   handleSetResult: (result: basicAnalysisResult | undefined) => void;
   setIsLoading: (loading: boolean) => void;
+  resultRef: React.RefObject<HTMLDivElement | null>;
 }
 
 const BasicForm = ({
   handleSetResult,
-  setIsLoading
+  setIsLoading,
+  resultRef
 }: BasicFormProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -28,6 +30,10 @@ const BasicForm = ({
   const onSubmit = async (values: z.infer<typeof askProps>) => {
     try {
       setIsLoading(true);
+      if (resultRef.current) {
+        window.scrollTo({ top: resultRef.current.offsetTop - 50, behavior: "smooth" });
+      }
+      
       const response = await axios.post("/api/ask", values, {
         params: {
           formType: formType.Values.BASIC

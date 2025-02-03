@@ -31,6 +31,19 @@ const AnalysisResults = ({ result }: AnalysisResultsProps) => {
         </BubbleCard>
       </div>
 
+      {"imageAnalysis" in result && (result.imageAnalysis !== "undefined") && (
+        <BubbleCard>
+          <div className="relative flex items-center">
+            <div className="flex flex-col">
+              <Title title="Image Analysis" />
+              <p className="flex items-center gap-x-2 text-3xl mt-2 pl-4">
+                {result.imageAnalysis}
+              </p>
+            </div>
+          </div>
+        </BubbleCard>
+      )}
+
       {isAdvanced && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <BubbleCard>

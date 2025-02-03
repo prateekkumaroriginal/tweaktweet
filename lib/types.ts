@@ -13,4 +13,5 @@ export type advancedAnalysisResult = basicAnalysisResult & {
   likesPredicted: string;
   sharesPredicted: string;
   commentsPredicted: string;
+  imageAnalysis: string;
 }

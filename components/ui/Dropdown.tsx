@@ -55,7 +55,7 @@ const Dropdown = ({
       control={control}
       name={name}
       render={({ field }) => (
-        <div className="flex flex-col gap-y-2">
+        <div className="flex flex-col w-full gap-y-2">
           <label
             htmlFor={name}
             className="text-sm pr-4 uppercase font-semibold text-slate-300/60"
