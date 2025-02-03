@@ -3,11 +3,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import axios from "axios";
-import Input from "./Input";
-import Dropdown from "./Dropdown";
-import TextArea from "./TextArea";
-import { useRef } from "react";
-import { basicAnalysisResult } from "@/lib/types";
+import Input from "./ui/Input";
+import Dropdown from "./ui/Dropdown";
+import TextArea from "./ui/TextArea";
+import { useRef, useState } from "react";
+import { advancedAnalysisResult } from "@/lib/types";
+import UploadDropzone from "./ui/UploadDropzone";
 
 export const platformOptions = [
   { label: "Instagram", value: "INSTAGRAM" },
@@ -18,29 +19,55 @@ export const platformOptions = [
 ];
 
 interface AdvancedFormProps {
-  handleSetResult: (result: basicAnalysisResult | undefined) => void;
+  handleSetResult: (result: advancedAnalysisResult | undefined) => void;
   setIsLoading: (loading: boolean) => void;
+  resultRef: React.RefObject<HTMLDivElement | null>;
 }
 
 const AdvancedForm = ({
   handleSetResult,
-  setIsLoading
+  setIsLoading,
+  resultRef
 }: AdvancedFormProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const form = useForm<z.infer<typeof advancedAskProps>>({
     resolver: zodResolver(advancedAskProps),
     mode: "all",
   });
 
-  const { register, control, handleSubmit, formState, reset } = form;
+  const { register, control, handleSubmit, formState, reset, setValue } = form;
+
+  const handleFileSelect = (file: File | null) => {
+    setSelectedFile(file);
+    if (file){
+      setValue('image', file, { shouldValidate: true });
+    }
+  };
 
   const onSubmit = async (values: z.infer<typeof advancedAskProps>) => {
     try {
       setIsLoading(true);
-      const response = await axios.post("/api/ask", values, {
+      if (resultRef.current) {
+        window.scrollTo({ top: resultRef.current.offsetTop - 50, behavior: "smooth" });
+      }
+
+      const formData = new FormData();
+      formData.append("text", values.text);
+      formData.append("followers", values.followers.toString());
+      formData.append("platform", values.platform);
+
+      if (selectedFile) {
+        formData.append("image", selectedFile);
+      }
+
+      const response = await axios.post("/api/ask", formData, {
         params: {
           formType: formType.Values.ADVANCED
+        },
+        headers: {
+          'Content-Type': 'multipart/form-data',
         }
       });
       handleSetResult(response.data);
@@ -73,20 +100,27 @@ const AdvancedForm = ({
         name="text"
       />
 
-      <Input
-        register={register}
-        errors={formState.errors}
-        label="Followers"
-        name="followers"
-        type="number"
-      />
+      <div className="flex gap-x-4">
+        <Input
+          register={register}
+          errors={formState.errors}
+          label="Followers"
+          name="followers"
+          type="number"
+        />
 
-      <Dropdown
-        control={control}
-        errors={formState.errors}
-        label="Platform"
-        name="platform"
-        options={platformOptions}
+        <Dropdown
+          control={control}
+          errors={formState.errors}
+          label="Platform"
+          name="platform"
+          options={platformOptions}
+        />
+      </div>
+
+      <UploadDropzone
+        onFileSelect={handleFileSelect}
+        selectedFile={selectedFile}
       />
 
       <div className="flex justify-end gap-x-2">

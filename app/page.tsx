@@ -1,21 +1,27 @@
 "use client"
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import AdvancedForm from "@/components/AdvancedForm";
 import BasicForm from "@/components/BasicForm";
 import AnalysisResults from "@/components/AnalysisResults";
 import { ArrowLeftRight } from "lucide-react";
-import { basicAnalysisResult } from "@/lib/types";
+import { advancedAnalysisResult, basicAnalysisResult } from "@/lib/types";
 
 export default function Home() {
-  const [result, setResult] = useState<basicAnalysisResult>();
+  const [result, setResult] = useState<advancedAnalysisResult | basicAnalysisResult>();
   const [isAdvanced, setIsAdvanced] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const resultRef = useRef<HTMLDivElement>(null);
 
-  const handleSetResult = (data: basicAnalysisResult | undefined) => {
+  const handleSetResult = (data: advancedAnalysisResult | basicAnalysisResult | undefined) => {
     setIsLoading(false);
     setResult(data);
   };
+
+  const changeMode = () => {
+    setResult(undefined);
+    setIsAdvanced((prev) => !prev);
+  }
 
   return (
     <div className="h-full flex flex-col items-center gap-y-8 pt-20 px-8">
@@ -27,7 +33,7 @@ export default function Home() {
       </div>
 
       <button
-        onClick={() => setIsAdvanced((prev) => !prev)}
+        onClick={changeMode}
         className={`flex justify-center items-center gap-x-2 py-2 px-4 rounded ${isAdvanced ? "bg-violet-600 hover:bg-violet-600/90" : "bg-blue-600 hover:bg-blue-600/90"} text-white font-mono font-semibold transition-all`}
       >
         <span>{isAdvanced ? "Advanced" : "Basic"}</span>
@@ -39,15 +45,20 @@ export default function Home() {
           <AdvancedForm
             setIsLoading={setIsLoading}
             handleSetResult={handleSetResult}
+            resultRef={resultRef}
           />
         ) : (
           <BasicForm
             setIsLoading={setIsLoading}
             handleSetResult={handleSetResult}
+            resultRef={resultRef}
           />
         )}
 
-        <div className="w-full mt-8">
+        <div
+          ref={resultRef}
+          className="w-full mt-8"
+        >
           {isLoading ? (
             <AnalysisResults.Skeleton />
           ) : (

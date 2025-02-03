@@ -8,12 +8,10 @@ export async function POST(req: Request) {
         const { searchParams } = new URL(req.url);
 
         const askType = searchParams.get('formType') || formType.Values.BASIC;
-        console.log(searchParams.get('formType'));
-
-        const body = await req.json();
-        console.log(body);
 
         if (askType === formType.Values.BASIC) {
+            const body = await req.json();
+
             const parsedInput = askProps.safeParse(body);
             if (!parsedInput.success) {
                 return NextResponse.json(
@@ -30,6 +28,11 @@ export async function POST(req: Request) {
             console.log("json", jsonResult);
             return NextResponse.json(jsonResult);
         } else {
+            const formData = await req.formData();
+            const body = Object.fromEntries(formData.entries());
+
+            console.log(body);
+
             const parsedInput = advancedAskProps.safeParse(body);
             if (!parsedInput.success) {
                 return NextResponse.json(
@@ -38,7 +41,33 @@ export async function POST(req: Request) {
                 );
             }
 
-            const result = await model.generateContent(ADVANCED_CONTEXT + JSON.stringify(parsedInput.data));
+            let result;
+            if (body.image) {
+                const imageFile = body.image as File;
+                const arrayBuffer = await imageFile.arrayBuffer();
+                const base64String = Buffer.from(arrayBuffer).toString('base64');
+
+                const imageAnalysisResult = await model.generateContent([
+                    {
+                        inlineData: {
+                            data: base64String,
+                            mimeType: imageFile.type,
+                        },
+                    },
+                    'Caption this image.',
+                ]);
+
+                result = await model.generateContent(
+                    ADVANCED_CONTEXT +
+                    JSON.stringify({
+                        ...parsedInput.data,
+                        imageCaption: imageAnalysisResult.response.text()
+                    })
+                );
+            } else {
+                result = await model.generateContent(ADVANCED_CONTEXT + JSON.stringify(parsedInput.data));
+            }
+
             const jsonText = result.response.text();
             console.log("Text", jsonText);
 
