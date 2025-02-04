@@ -31,7 +31,7 @@ const AnalysisResults = ({ result }: AnalysisResultsProps) => {
         </BubbleCard>
       </div>
 
-      {"imageAnalysis" in result && (result.imageAnalysis !== "undefined") && (
+      {"imageAnalysis" in result && result.imageAnalysis && (
         <BubbleCard>
           <div className="relative flex items-center">
             <div className="flex flex-col">
@@ -101,21 +101,23 @@ const AnalysisResults = ({ result }: AnalysisResultsProps) => {
         ))}
       </div>
 
-      <div className="flex w-full">
-        <BubbleCard>
-          <Title title="Suggested Hashtags" />
-          <div className="flex flex-wrap w-full gap-2 mt-2 pl-4">
-            {result.suggestedHashtags.map(h => (
-              <span
-                key={h}
-                className='px-4 py-2 border border-blue-800 bg-blue-900 font-semibold rounded-full'
-              >
-                {h}
-              </span>
-            ))}
-          </div>
-        </BubbleCard>
-      </div>
+      {result.suggestedHashtags.length > 0 && (
+        <div className="flex w-full">
+          <BubbleCard>
+            <Title title="Suggested Hashtags" />
+            <div className="flex flex-wrap w-full gap-2 mt-2 pl-4">
+              {result.suggestedHashtags.map(h => (
+                <span
+                  key={h}
+                  className='px-4 py-2 border border-blue-800 bg-blue-900 font-semibold rounded-full'
+                >
+                  {h}
+                </span>
+              ))}
+            </div>
+          </BubbleCard>
+        </div>
+      )}
 
       <div className="w-full">
         <BubbleCard>

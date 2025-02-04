@@ -142,7 +142,6 @@ export default function UploadDropzone({ onFileSelect, selectedFile }: UploadDro
               accept={ACCEPTED_IMAGE_TYPES.join(",")}
             />
 
-
             <label
               htmlFor="fileInput"
               className="cursor-pointer flex flex-col items-center justify-center p-8"
