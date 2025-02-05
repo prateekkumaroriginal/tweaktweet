@@ -74,7 +74,6 @@ describe("TweakTweet Tests", () => {
       expect(result).toHaveProperty('sharesPredicted', expect.any(String));
       expect(result).toHaveProperty('commentsPredicted', expect.any(String));
       
-      // Fixed the imageAnalysis check
       if (result.imageAnalysis !== null) {
         expect(result.imageAnalysis).toEqual(expect.any(String));
       } else {

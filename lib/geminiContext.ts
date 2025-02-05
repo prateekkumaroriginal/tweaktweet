@@ -1,5 +1,5 @@
 export const BASIC_CONTEXT: string = `Give me a sentiment and engagement analysis of the post below. Give answer in json format. The fields should be:-
-1. engagementPredicted: "very poor", "poor", "average", "high", "very high"
+1. engagementPredicted: "poor", "average", "high", "very high"
 2. sentiment: what is the sentiment of the post should be here.
 3. bestTime: what is the best time to post should be here. Don't give any excuses like "It's difficult to determine the best time without more context". Just give a time.
 4. suggestions: an array containing the suggestions for maximizing engagement.
@@ -14,7 +14,7 @@ Here's the post:-\n
 `
 
 export const ADVANCED_CONTEXT: string = `Give me a sentiment and engagement analysis of the post below. Give answer in json format. The fields should be:-
-1. engagementPredicted: "very poor", "poor", "average", "high", "very high"
+1. engagementPredicted: "poor", "average", "high", "very high"
 2. sentiment: what is the sentiment of the post should be here.
 3. bestTime: what is the best time to post should be here. Don't give any excuses like "It's difficult to determine the best time without more context". Just give a time.
 4. suggestions: an array containing the suggestions for maximizing engagement.
@@ -25,7 +25,8 @@ export const ADVANCED_CONTEXT: string = `Give me a sentiment and engagement anal
 9. likesPredicted: Give a rough estimate of how many likes the post would achieve based on the platform and number of followers.
 10. sharesPredicted: Predict how many shares the post could get based on the platform and number of followers.
 11. commentsPredicted: Estimate the number of comments the post might receive based on the platform and number of followers.
-12. imageAnalysis: A string or undefined. If there is an image caption, then review it with the text and give its analysis. Don't mention image captioning, the user must not know that you are actually analysing image caption instead of the image itself. Else, null.
+12. imageAnalysis: If imageCaption exists in the input, analyze how the image (based on the caption) complements the post text and enhances the message. Return null if no imageCaption is present.
+
 
 Note: Start with '{' and end with '}' as plain text. Don't give it as a block of code. No other bullshit.
 
