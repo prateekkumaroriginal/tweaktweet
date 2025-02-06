@@ -71,9 +71,11 @@ export async function POST(req: Request) {
                         imageCaption: imageCaption
                     })
                 );
+            } else {
+                result = await model.generateContent(ADVANCED_CONTEXT + parsedInput.data.text);
             }
 
-            const jsonText = result!.response.text();
+            const jsonText = result.response.text();
             console.log("Text", jsonText);
 
             const jsonResult = JSON.parse(jsonText);
