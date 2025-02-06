@@ -3,8 +3,12 @@ import { NextResponse } from "next/server";
 import { BASIC_CONTEXT, ADVANCED_CONTEXT } from "@/lib/geminiContext";
 import { advancedAskProps, askProps, formType } from "@/lib/zod-props";
 import vision from "@google-cloud/vision";
+const googleCredentialsBase64 = process.env.GOOGLE_APPLICATION_CREDENTIALS_BASE64;
+const googleCredentials = JSON.parse(
+    Buffer.from(googleCredentialsBase64!, "base64").toString("utf8")
+);
 
-const client = new vision.ImageAnnotatorClient();
+const client = new vision.ImageAnnotatorClient({ credentials: googleCredentials });
 
 export async function POST(req: Request) {
     try {
