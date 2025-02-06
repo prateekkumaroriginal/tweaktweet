@@ -25,7 +25,7 @@ export const ADVANCED_CONTEXT: string = `Give me a sentiment and engagement anal
 9. likesPredicted: Give a rough estimate of how many likes the post would achieve based on the platform and number of followers.
 10. sharesPredicted: Predict how many shares the post could get based on the platform and number of followers.
 11. commentsPredicted: Estimate the number of comments the post might receive based on the platform and number of followers.
-12. imageAnalysis: If imageCaption exists in the input, analyze how the image (based on the caption) complements the post text and enhances the message. Return null if no imageCaption is present.
+12. imageAnalysis: If imageCaption exists in the input, analyze how the image (based on the caption) complements the post text and enhances the message. But don't mention that you are analyzing imgeCaption, instead of actual image. Return null if no imageCaption is present.
 
 
 Note: Start with '{' and end with '}' as plain text. Don't give it as a block of code. No other bullshit.

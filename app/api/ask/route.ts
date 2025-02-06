@@ -2,6 +2,9 @@ import model from "@/lib/gemini";
 import { NextResponse } from "next/server";
 import { BASIC_CONTEXT, ADVANCED_CONTEXT } from "@/lib/geminiContext";
 import { advancedAskProps, askProps, formType } from "@/lib/zod-props";
+import vision from "@google-cloud/vision";
+
+const client = new vision.ImageAnnotatorClient();
 
 export async function POST(req: Request) {
     try {
@@ -41,34 +44,32 @@ export async function POST(req: Request) {
                 );
             }
 
+            let imageCaption = "";
             let result;
             if (body.image) {
                 const imageFile = body.image as File;
                 const arrayBuffer = await imageFile.arrayBuffer();
                 const base64String = Buffer.from(arrayBuffer).toString('base64');
 
-                const imageAnalysisResult = await model.generateContent([
-                    {
-                        inlineData: {
-                            data: base64String,
-                            mimeType: imageFile.type,
-                        },
-                    },
-                    'Caption this image.',
-                ]);
+                const [caption] = await client.labelDetection({
+                    image: { content: base64String },
+                });
+
+                const labels = caption.labelAnnotations?.map(label => label.description) || [];
+                imageCaption = labels.join(", ");
+
+                console.log("Generated Caption:", imageCaption);
 
                 result = await model.generateContent(
                     ADVANCED_CONTEXT +
                     JSON.stringify({
                         ...parsedInput.data,
-                        imageCaption: imageAnalysisResult.response.text()
+                        imageCaption: imageCaption
                     })
                 );
-            } else {
-                result = await model.generateContent(ADVANCED_CONTEXT + JSON.stringify(parsedInput.data));
             }
 
-            const jsonText = result.response.text();
+            const jsonText = result!.response.text();
             console.log("Text", jsonText);
 
             const jsonResult = JSON.parse(jsonText);
